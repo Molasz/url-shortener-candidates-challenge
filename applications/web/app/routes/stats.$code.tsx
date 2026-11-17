@@ -62,26 +62,26 @@ export default function UrlStatsDetail({ loaderData }: Route.ComponentProps) {
   const shortUrl = `${baseUrl}/s/${url.shortCode}`;
 
   return (
-    <main className="min-h-screen bg-gray-50 px-6 py-12 dark:bg-gray-950">
+    <main className="min-h-screen px-6 py-12">
       <div className="mx-auto w-full max-w-3xl">
         <Link
           to="/stats"
-          className="text-sm font-medium text-blue-600 hover:underline dark:text-blue-400"
+          className="text-sm font-medium text-moss transition hover:text-forest focus:outline-none focus-visible:ring-2 focus-visible:ring-moss focus-visible:ring-offset-2 focus-visible:ring-offset-cream dark:text-sage dark:hover:text-cream dark:focus-visible:ring-sage dark:focus-visible:ring-offset-forest"
         >
           ← Back to statistics
         </Link>
 
-        <div className="mt-6 overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900">
-          <div className="flex flex-col gap-4 border-b border-gray-200 p-6 sm:flex-row sm:items-start sm:justify-between dark:border-gray-800">
+        <div className="mt-6 overflow-hidden rounded-2xl border border-sage/60 bg-cream dark:border-sage/25 dark:bg-cream/5">
+          <div className="flex flex-col gap-4 border-b border-sage/50 p-6 sm:flex-row sm:items-start sm:justify-between dark:border-sage/20">
             <div className="min-w-0">
-              <p className="text-xs font-semibold tracking-wide text-gray-400 uppercase dark:text-gray-500">
+              <p className="text-xs font-semibold tracking-widest text-moss uppercase dark:text-sage">
                 Short link
               </p>
               <a
                 href={shortUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-1 block font-mono text-lg font-semibold break-all text-blue-600 hover:underline dark:text-blue-400"
+                className="mt-1 block font-mono text-lg font-semibold break-all text-forest underline decoration-sage decoration-2 underline-offset-4 transition hover:text-moss dark:text-cream dark:hover:text-sage"
               >
                 {shortUrl}
               </a>
@@ -92,19 +92,19 @@ export default function UrlStatsDetail({ loaderData }: Route.ComponentProps) {
 
           <dl className="grid gap-6 p-6 sm:grid-cols-3">
             <div>
-              <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
+              <dt className="text-xs font-semibold tracking-widest text-moss uppercase dark:text-sage">
                 Clicks
               </dt>
-              <dd className="mt-1 text-3xl font-bold tabular-nums text-gray-900 dark:text-gray-50">
+              <dd className="mt-2 text-3xl font-semibold tabular-nums text-forest dark:text-cream">
                 {formatNumber(url.clickCount)}
               </dd>
             </div>
 
             <div>
-              <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
+              <dt className="text-xs font-semibold tracking-widest text-moss uppercase dark:text-sage">
                 Created
               </dt>
-              <dd className="mt-1 text-sm text-gray-700 dark:text-gray-300">
+              <dd className="mt-2 text-sm text-forest/90 dark:text-cream/90">
                 <time dateTime={url.createdAt}>
                   {formatDate(url.createdAt)}
                 </time>
@@ -112,12 +112,12 @@ export default function UrlStatsDetail({ loaderData }: Route.ComponentProps) {
             </div>
 
             <div>
-              <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
+              <dt className="text-xs font-semibold tracking-widest text-moss uppercase dark:text-sage">
                 Status
               </dt>
-              <dd className="mt-1 inline-flex items-center gap-1.5 text-sm font-medium text-green-700 dark:text-green-400">
+              <dd className="mt-2 inline-flex items-center gap-2 rounded-full bg-sage/25 px-3 py-1 text-sm font-medium text-forest dark:bg-sage/15 dark:text-cream">
                 <span
-                  className="size-2 rounded-full bg-green-500"
+                  className="size-2 rounded-full bg-moss dark:bg-sage"
                   aria-hidden="true"
                 />
                 Active
@@ -125,16 +125,16 @@ export default function UrlStatsDetail({ loaderData }: Route.ComponentProps) {
             </div>
           </dl>
 
-          <div className="border-t border-gray-200 p-6 dark:border-gray-800">
-            <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+          <div className="border-t border-sage/50 p-6 dark:border-sage/20">
+            <p className="text-xs font-semibold tracking-widest text-moss uppercase dark:text-sage">
               Original URL
             </p>
-            <p className="mt-1">
+            <p className="mt-2">
               <a
                 href={url.originalUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm break-all text-blue-600 hover:underline dark:text-blue-400"
+                className="text-sm break-all text-moss underline decoration-sage underline-offset-4 transition hover:text-forest dark:text-sage dark:hover:text-cream"
               >
                 {url.originalUrl}
               </a>

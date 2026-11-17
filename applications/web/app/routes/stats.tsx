@@ -38,21 +38,31 @@ export default function Stats({ loaderData }: Route.ComponentProps) {
   const totalClicks = urls.reduce((sum, url) => sum + url.clickCount, 0);
 
   return (
-    <main className="min-h-screen bg-gray-50 px-6 py-12 dark:bg-gray-950">
+    <main className="min-h-screen px-6 py-12">
       <div className="mx-auto w-full max-w-4xl">
-        <header>
+        <Link
+          to="/"
+          className="text-sm font-medium text-moss transition hover:text-forest focus:outline-none focus-visible:ring-2 focus-visible:ring-moss focus-visible:ring-offset-2 focus-visible:ring-offset-cream dark:text-sage dark:hover:text-cream dark:focus-visible:ring-sage dark:focus-visible:ring-offset-forest"
+        >
+          ← Back to shortener
+        </Link>
+
+        <header className="mt-4 flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-semibold tracking-tight text-forest dark:text-cream">
+              Statistics
+            </h1>
+            <p className="mt-1 text-sm text-moss dark:text-sage">
+              Every active short link and how many times it has been visited.
+            </p>
+          </div>
+
           <Link
             to="/"
-            className="text-sm font-medium text-blue-600 hover:underline dark:text-blue-400"
+            className="inline-flex items-center justify-center rounded-xl bg-forest px-4 py-2.5 text-sm font-semibold text-cream transition hover:bg-moss focus:outline-none focus-visible:ring-2 focus-visible:ring-moss focus-visible:ring-offset-2 focus-visible:ring-offset-cream dark:bg-cream dark:text-forest dark:hover:bg-sage dark:focus-visible:ring-sage dark:focus-visible:ring-offset-forest"
           >
-            ← Back to shortener
+            New short link
           </Link>
-          <h1 className="mt-3 text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-50">
-            Statistics
-          </h1>
-          <p className="mt-1 text-gray-600 dark:text-gray-400">
-            Every active short link and how many times it has been visited.
-          </p>
         </header>
 
         <section
@@ -64,22 +74,22 @@ export default function Stats({ loaderData }: Route.ComponentProps) {
         </section>
 
         {urls.length === 0 ? (
-          <div className="mt-8 rounded-xl border border-dashed border-gray-300 bg-white p-10 text-center dark:border-gray-700 dark:bg-gray-900">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-50">
+          <div className="mt-8 rounded-2xl border border-dashed border-sage bg-cream/60 px-8 py-14 text-center dark:border-sage/30 dark:bg-cream/5">
+            <h2 className="text-lg font-semibold text-forest dark:text-cream">
               No links yet
             </h2>
-            <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+            <p className="mt-2 text-sm text-moss dark:text-sage">
               Shorten your first URL to start collecting click statistics.
             </p>
             <Link
               to="/"
-              className="mt-5 inline-flex items-center justify-center rounded-lg bg-gray-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-gray-700 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-300"
+              className="mt-6 inline-flex items-center justify-center rounded-xl bg-forest px-5 py-3 text-sm font-semibold text-cream transition hover:bg-moss focus:outline-none focus-visible:ring-2 focus-visible:ring-moss focus-visible:ring-offset-2 focus-visible:ring-offset-cream dark:bg-cream dark:text-forest dark:hover:bg-sage dark:focus-visible:ring-sage dark:focus-visible:ring-offset-forest"
             >
               Create a short link
             </Link>
           </div>
         ) : (
-          <ul className="mt-8 divide-y divide-gray-200 overflow-hidden rounded-xl border border-gray-200 bg-white dark:divide-gray-800 dark:border-gray-800 dark:bg-gray-900">
+          <ul className="mt-8 divide-y divide-sage/50 overflow-hidden rounded-2xl border border-sage/60 bg-cream dark:divide-sage/20 dark:border-sage/25 dark:bg-cream/5">
             {urls.map((url) => (
               <li
                 key={url.shortCode}
@@ -90,35 +100,38 @@ export default function Stats({ loaderData }: Route.ComponentProps) {
                     href={`${baseUrl}/s/${url.shortCode}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="font-mono text-sm font-semibold break-all text-blue-600 hover:underline dark:text-blue-400"
+                    className="font-mono text-sm font-semibold break-all text-moss transition hover:text-forest hover:underline dark:text-sage dark:hover:text-cream"
                   >
                     {baseUrl}/s/{url.shortCode}
                   </a>
                   <p
-                    className="mt-1 truncate text-sm text-gray-500 dark:text-gray-400"
+                    className="mt-1 truncate text-sm text-moss dark:text-sage"
                     title={url.originalUrl}
                   >
                     {url.originalUrl}
                   </p>
-                  <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
-                    Created <time dateTime={url.createdAt}>{formatDate(url.createdAt)}</time>
+                  <p className="mt-1 text-xs tracking-wide text-moss uppercase dark:text-sage">
+                    Created{" "}
+                    <time dateTime={url.createdAt}>
+                      {formatDate(url.createdAt)}
+                    </time>
                   </p>
                 </div>
 
                 <div className="flex shrink-0 flex-wrap items-center justify-between gap-4 sm:flex-col sm:items-end">
                   <div className="flex items-baseline gap-2 sm:flex-col sm:items-end">
-                    <span className="text-2xl font-bold tabular-nums text-gray-900 dark:text-gray-50">
+                    <span className="text-2xl font-semibold tabular-nums text-forest dark:text-cream">
                       {formatNumber(url.clickCount)}
                     </span>
-                    <span className="text-xs font-medium tracking-wide text-gray-400 uppercase dark:text-gray-500">
+                    <span className="text-xs font-medium tracking-wide text-moss uppercase dark:text-sage">
                       {url.clickCount === 1 ? "click" : "clicks"}
                     </span>
                   </div>
 
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-4">
                     <Link
                       to={`/stats/${url.shortCode}`}
-                      className="text-sm font-medium text-blue-600 hover:underline dark:text-blue-400"
+                      className="text-sm font-medium text-moss underline decoration-sage underline-offset-4 transition hover:text-forest dark:text-sage dark:hover:text-cream"
                     >
                       Details
                     </Link>
@@ -136,11 +149,11 @@ export default function Stats({ loaderData }: Route.ComponentProps) {
 
 function SummaryCard({ label, value }: { label: string; value: number }) {
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-gray-900">
-      <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+    <div className="rounded-2xl border border-sage/60 bg-cream p-6 dark:border-sage/25 dark:bg-cream/5">
+      <p className="text-xs font-semibold tracking-widest text-moss uppercase dark:text-sage">
         {label}
       </p>
-      <p className="mt-1 text-3xl font-bold tabular-nums text-gray-900 dark:text-gray-50">
+      <p className="mt-2 text-3xl font-semibold tabular-nums text-forest dark:text-cream">
         {formatNumber(value)}
       </p>
     </div>

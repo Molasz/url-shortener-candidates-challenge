@@ -26,9 +26,9 @@
 
 6 - Link stats detail & delete
 
-## What I Would Do With More Time
+7 - UI Redesign
 
-<!-- What would you tackle next if you had more time? -->
+## What I Would Do With More Time
 
 ## AI Usage
 

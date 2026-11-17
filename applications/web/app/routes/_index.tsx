@@ -46,63 +46,98 @@ export default function Index({ loaderData }: Route.ComponentProps) {
   const { baseUrl } = loaderData;
   const actionData = useActionData<typeof action>();
 
+  const error =
+    actionData && "error" in actionData ? actionData.error : undefined;
+  const shortenedUrl =
+    actionData && "shortenedUrl" in actionData
+      ? actionData.shortenedUrl
+      : undefined;
+  const previousValue =
+    actionData && "value" in actionData ? actionData.value : "";
+
   return (
-    <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-lime-400 via-pink-500 to-cyan-300">
-      <div className="bg-yellow-300 p-12 rounded-none border-8 border-dashed border-purple-600 w-full max-w-lg rotate-1 shadow-2xl shadow-red-500">
-        <h1 className="text-4xl font-mono italic text-center mb-8 text-fuchsia-600 underline decoration-wavy decoration-green-500 tracking-widest">
-          ~*~ URL Shortener ~*~
-        </h1>
+    <main className="flex min-h-screen flex-col items-center justify-center px-6 py-16">
+      <div className="w-full max-w-xl">
+        <header className="text-center">
+          <p className="text-xs font-semibold tracking-[0.35em] text-moss uppercase dark:text-sage">
+            URL Shortener
+          </p>
+          <h1 className="mt-4 text-4xl font-semibold tracking-tight text-forest sm:text-5xl dark:text-cream">
+            Short links, simply.
+          </h1>
+          <p className="mx-auto mt-3 max-w-md text-base text-forest/85 dark:text-cream/85">
+            Paste a long URL and get a clean link worth sharing.
+          </p>
+        </header>
 
-        <Form method="post" className="flex flex-col gap-6">
-          <input
-            type="text"
-            name="url"
-            placeholder="Enter your URL here..."
-            defaultValue={actionData?.value ?? ""}
-            aria-invalid={!!actionData?.error}
-            required
-            className="w-full px-4 py-3 text-base bg-orange-200 border-4 border-blue-600 text-purple-800 placeholder-red-400 rounded focus:outline-none"
-          />
+        <div className="mt-10 rounded-2xl border border-sage/60 bg-cream p-8 shadow-sm dark:border-sage/25 dark:bg-cream/5">
+          <Form method="post" className="flex flex-col gap-4">
+            <label
+              htmlFor="url"
+              className="text-sm font-medium text-forest dark:text-cream"
+            >
+              Your URL
+            </label>
+            <input
+              id="url"
+              type="text"
+              name="url"
+              placeholder="https://example.com/a/very/long/link"
+              defaultValue={previousValue}
+              aria-invalid={!!error}
+              aria-describedby={error ? "url-error" : "url-hint"}
+              required
+              className="w-full rounded-xl border border-sage bg-cream px-4 py-3 text-base text-forest transition placeholder:text-moss focus:border-moss focus:ring-2 focus:ring-moss/30 focus:outline-none dark:bg-forest/40 dark:text-cream dark:placeholder:text-sage dark:focus:border-sage dark:focus:ring-sage/30"
+            />
 
-          <div>
             <button
               type="submit"
-              className="w-full px-4 py-3 text-base bg-red-500 hover:bg-lime-500 text-yellow-200 border-4 border-teal-400 rounded-full skew-x-3 cursor-pointer"
+              className="w-full rounded-xl bg-forest px-5 py-3 text-sm font-semibold text-cream transition hover:bg-moss focus:outline-none focus-visible:ring-2 focus-visible:ring-moss focus-visible:ring-offset-2 focus-visible:ring-offset-cream dark:bg-cream dark:text-forest dark:hover:bg-sage dark:focus-visible:ring-sage dark:focus-visible:ring-offset-forest"
             >
-              ★ SHORTEN IT ★
+              Shorten URL
             </button>
-            <p className="text-sm text-indigo-800 mt-3 text-center font-bold bg-cyan-200 p-2 border-2 border-dotted border-orange-500">
-              Your shortened URL will start with {baseUrl}
-            </p>
-          </div>
-        </Form>
 
-        {actionData?.shortenedUrl && (
-          <div className="mt-8 p-4 bg-violet-400 rounded-3xl border-4 border-double border-yellow-500 -rotate-1">
-            <p className="text-lg text-lime-300 mb-2 font-black uppercase">
-              Your shortened URL:
-            </p>
-            <a
-              href={actionData.shortenedUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-red-200 break-all font-mono text-xl hover:text-blue-900 bg-pink-600 p-2 block"
+            <p
+              id="url-hint"
+              className="text-center text-xs text-moss dark:text-sage"
             >
-              {actionData.shortenedUrl}
-            </a>
-          </div>
-        )}
+              Short links start with{" "}
+              <span className="font-mono">{baseUrl}</span>
+            </p>
+          </Form>
 
-        {actionData?.error && (
-          <p className="mt-4 text-lg font-bold text-red-700">{actionData.error}</p>
-        )}
+          {error && (
+            <p
+              id="url-error"
+              className="mt-5 rounded-xl border border-moss/40 bg-moss/10 px-4 py-3 text-sm text-forest dark:border-sage/30 dark:bg-sage/10 dark:text-cream"
+            >
+              {error}
+            </p>
+          )}
+
+          {shortenedUrl && (
+            <div className="mt-6 border-t border-sage/50 pt-6 dark:border-sage/20">
+              <p className="text-xs font-semibold tracking-widest text-moss uppercase dark:text-sage">
+                Your short link
+              </p>
+              <a
+                href={shortenedUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-2 block font-mono text-lg font-medium break-all text-forest underline decoration-sage decoration-2 underline-offset-4 transition hover:text-moss dark:text-cream dark:hover:text-sage"
+              >
+                {shortenedUrl}
+              </a>
+            </div>
+          )}
+        </div>
 
         <div className="mt-8 text-center">
           <Link
             to="/stats"
-            className="text-sm font-bold text-indigo-800 underline decoration-2 underline-offset-4 hover:text-indigo-600"
+            className="inline-flex items-center gap-1 text-sm font-medium text-moss transition hover:text-forest focus:outline-none focus-visible:ring-2 focus-visible:ring-moss focus-visible:ring-offset-2 focus-visible:ring-offset-cream dark:text-sage dark:hover:text-cream dark:focus-visible:ring-sage dark:focus-visible:ring-offset-forest"
           >
-            View click statistics →
+            View click statistics <span aria-hidden="true">→</span>
           </Link>
         </div>
       </div>

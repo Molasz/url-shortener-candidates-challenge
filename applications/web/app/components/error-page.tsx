@@ -9,29 +9,27 @@ interface ErrorPageProps {
 
 export function ErrorPage({ status, title, message, stack }: ErrorPageProps) {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-white px-6 py-16 dark:bg-gray-950">
+    <main className="flex min-h-screen items-center justify-center px-6 py-16">
       <div className="w-full max-w-xl text-center">
-        <p className="text-sm font-semibold tracking-widest text-gray-400 uppercase dark:text-gray-500">
+        <p className="text-xs font-semibold tracking-[0.35em] text-moss uppercase dark:text-sage">
           Error {status}
         </p>
 
-        <h1 className="mt-3 text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-50">
+        <h1 className="mt-4 text-4xl font-semibold tracking-tight text-forest dark:text-cream">
           {title}
         </h1>
 
-        <p className="mt-4 text-base text-gray-600 dark:text-gray-300">
-          {message}
-        </p>
+        <p className="mt-4 text-base text-moss dark:text-sage">{message}</p>
 
         <Link
           to="/"
-          className="mt-8 inline-flex items-center justify-center rounded-lg bg-gray-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-2 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-300 dark:focus-visible:ring-gray-100 dark:focus-visible:ring-offset-gray-950"
+          className="mt-8 inline-flex items-center justify-center rounded-xl bg-forest px-5 py-3 text-sm font-semibold text-cream transition hover:bg-moss focus:outline-none focus-visible:ring-2 focus-visible:ring-moss focus-visible:ring-offset-2 focus-visible:ring-offset-cream dark:bg-cream dark:text-forest dark:hover:bg-sage dark:focus-visible:ring-sage dark:focus-visible:ring-offset-forest"
         >
           Back to home
         </Link>
 
         {stack && (
-          <pre className="mt-10 max-h-80 overflow-auto rounded-lg border border-gray-200 bg-gray-50 p-4 text-left text-xs leading-relaxed text-gray-700 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300">
+          <pre className="mt-10 max-h-80 overflow-auto rounded-xl border border-sage/60 bg-cream/60 p-4 text-left text-xs leading-relaxed text-forest/90 dark:border-sage/25 dark:bg-cream/5 dark:text-cream/90">
             <code>{stack}</code>
           </pre>
         )}
