@@ -29,6 +29,9 @@ COPY applications/web/package.json ./applications/web/
 COPY libs/engine/package.json ./libs/engine/
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
 
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
 WORKDIR /app/applications/web
 EXPOSE 3000
-CMD ["pnpm", "start"]
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
