@@ -1,4 +1,6 @@
+import { customAlphabet } from "nanoid";
 import { prisma } from "./db";
+import { Prisma } from "./generated/prisma/client";
 
 export type ShortenedUrlRecord = {
   id: string;
@@ -9,26 +11,46 @@ export type ShortenedUrlRecord = {
   deletedAt: Date | null;
 };
 
+const ALPHABET =
+  "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+const CODE_LENGTH = 8;
+const MAX_GENERATION_ATTEMPTS = 5;
+
+const nanoId = customAlphabet(ALPHABET, CODE_LENGTH);
+
 export function generateShortCode(): string {
-  const chars = "abc";
-  const length = 2;
-  let code = "";
-  for (let i = 0; i < length; i++) {
-    code += chars[Math.floor(Math.random() * chars.length)];
-  }
-  return code;
+  return nanoId();
+}
+
+function isUniqueConstraintError(error: unknown): boolean {
+  return (
+    error instanceof Prisma.PrismaClientKnownRequestError &&
+    error.code === "P2002"
+  );
 }
 
 export async function createShortenedUrl(
   originalUrl: string,
-  shortCode = generateShortCode(),
 ): Promise<ShortenedUrlRecord> {
-  return prisma.shortenedUrl.create({
-    data: {
-      originalUrl,
-      shortCode,
-    },
-  });
+  for (let attempt = 0; attempt < MAX_GENERATION_ATTEMPTS; attempt++) {
+    const shortCode = generateShortCode();
+
+    const existing = await prisma.shortenedUrl.findUnique({
+      where: { shortCode },
+    });
+    if (existing) continue;
+
+    try {
+      return await prisma.shortenedUrl.create({
+        data: { originalUrl, shortCode },
+      });
+    } catch (error) {
+      if (isUniqueConstraintError(error)) continue;
+      throw error;
+    }
+  }
+
+  throw new Error("Could not generate a unique short code. Please try again.");
 }
 
 export async function findActiveUrlByCode(

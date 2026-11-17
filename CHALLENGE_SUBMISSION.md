@@ -3,12 +3,15 @@
 ## What I Did
 
 1 - Data persistence [Prisma + SQLite]
-- Add dependencies
-- Create schema (ShortenedUrl)
 - Setup prisma 7
+- Create schema (ShortenedUrl)
 - Init prisma client
 - Delete old Map and use prisma functions
 - Configurations: commands, .env, docker...
+
+2 - Short code generation
+- Replace the old "abc"/2-char generator with nanoid(8) (218B codes)
+- Verify uniqueness against the database with retry logic
 
 ## What I Would Do With More Time
 
