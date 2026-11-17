@@ -1,6 +1,5 @@
 import { DomainError } from "./domain-error";
 
-/** Raised when no active shortened URL exists for a short code. */
 export class UrlNotFoundError extends DomainError {
   readonly shortCode: string;
 

@@ -24,6 +24,8 @@
 5 - Error handeling
 - Create 4 error types (Domain, InvalidUrl, UrlNotFound, DuplicateCode)
 
+6 - Link stats detail & delete
+
 ## What I Would Do With More Time
 
 <!-- What would you tackle next if you had more time? -->

@@ -2,11 +2,6 @@ import type { ShortenedUrl } from "../../domain/entities/shortened-url";
 import { UrlNotFoundError } from "../../domain/errors/url-not-found.error";
 import type { UrlRepository } from "../../domain/repositories/url-repository";
 
-/**
- * Resolves a short code to its active URL and records the visit.
- *
- * @throws {UrlNotFoundError} when the code does not exist or was soft-deleted.
- */
 export class RedirectUrlUseCase {
   constructor(private readonly urls: UrlRepository) {}
 

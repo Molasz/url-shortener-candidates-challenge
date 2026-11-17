@@ -16,6 +16,7 @@ export type { CodeGeneratorOptions } from "./application/services/code-generator
 export { CreateShortUrlUseCase } from "./application/use-cases/create-short-url";
 export { RedirectUrlUseCase } from "./application/use-cases/redirect-url";
 export { ListUrlsUseCase } from "./application/use-cases/list-urls";
+export { GetUrlStatsUseCase } from "./application/use-cases/get-url-stats";
 export { DeleteUrlUseCase } from "./application/use-cases/delete-url";
 
 export { createShortUrlSchema } from "./application/validation/create-short-url";
@@ -24,6 +25,7 @@ export type { CreateShortUrlInput } from "./application/validation/create-short-
 export {
   createShortUrlUseCase,
   deleteUrlUseCase,
+  getUrlStatsUseCase,
   listUrlsUseCase,
   redirectUrlUseCase,
 } from "./container";

@@ -62,7 +62,6 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
       message = error.statusText || message;
     }
   } else if (error instanceof Error && import.meta.env.DEV) {
-    // Never leak internal error details or stack traces in production.
     message = error.message;
     stack = error.stack;
   }

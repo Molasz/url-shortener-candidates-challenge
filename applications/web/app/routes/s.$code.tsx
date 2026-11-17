@@ -8,9 +8,6 @@ export async function loader({ params }: Route.LoaderArgs) {
     const shortened = await redirectUrlUseCase.execute(params.code);
     return redirect(shortened.originalUrl);
   } catch (error) {
-    // A missing or deleted code is an expected outcome, not a crash.
-    // Returning data() keeps the 404 status *and* renders the friendly page
-    // on initial document requests (a thrown Response would be sent raw).
     if (error instanceof UrlNotFoundError) {
       return data({ notFound: true }, { status: 404 });
     }

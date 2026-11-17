@@ -10,15 +10,6 @@ import {
 
 const MAX_CREATE_ATTEMPTS = 5;
 
-/**
- * Creates a shortened URL.
- *
- * The use case validates its input, asks the code generator for an unused
- * code and persists the result through the repository port. Validation
- * failures surface as InvalidUrlError; everything else is unexpected.
- *
- * @throws {InvalidUrlError} when the submitted URL is not valid.
- */
 export class CreateShortUrlUseCase {
   constructor(
     private readonly urls: UrlRepository,
@@ -43,8 +34,6 @@ export class CreateShortUrlUseCase {
       try {
         return await this.urls.create({ originalUrl, shortCode });
       } catch (error) {
-        // Another request may have taken the code between the check and the
-        // insert; generate a fresh one and retry.
         if (error instanceof DuplicateShortCodeError) continue;
         throw error;
       }

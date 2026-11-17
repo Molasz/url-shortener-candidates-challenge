@@ -1,4 +1,4 @@
-import { Form, useActionData } from "react-router";
+import { Form, Link, useActionData } from "react-router";
 import type { Route } from "./+types/_index";
 import {
   baseUrl,
@@ -27,8 +27,6 @@ export async function action({ request }: Route.ActionArgs) {
       shortenedUrl: `${baseUrl ?? ""}/s/${shortened.shortCode}`,
     };
   } catch (error) {
-    // Validation failures are expected user input errors, not crashes:
-    // return them as form data so the page can show feedback inline.
     if (error instanceof InvalidUrlError) {
       return { error: error.message, value };
     }
@@ -98,6 +96,15 @@ export default function Index({ loaderData }: Route.ComponentProps) {
         {actionData?.error && (
           <p className="mt-4 text-lg font-bold text-red-700">{actionData.error}</p>
         )}
+
+        <div className="mt-8 text-center">
+          <Link
+            to="/stats"
+            className="text-sm font-bold text-indigo-800 underline decoration-2 underline-offset-4 hover:text-indigo-600"
+          >
+            View click statistics →
+          </Link>
+        </div>
       </div>
     </main>
   );

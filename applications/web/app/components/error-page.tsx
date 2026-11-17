@@ -7,7 +7,6 @@ interface ErrorPageProps {
   stack?: string;
 }
 
-/** Shared, user-friendly page for 404s and unexpected errors. */
 export function ErrorPage({ status, title, message, stack }: ErrorPageProps) {
   return (
     <main className="flex min-h-screen items-center justify-center bg-white px-6 py-16 dark:bg-gray-950">
