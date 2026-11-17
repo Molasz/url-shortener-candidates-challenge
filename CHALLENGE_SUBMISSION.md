@@ -18,6 +18,12 @@
 - Validate in the server action
 - Error feedback on the client
 
+4 - Refactor application arquitecture [DDD]
+- Infrastrucure, Domain, Application
+
+5 - Error handeling
+- Create 4 error types (Domain, InvalidUrl, UrlNotFound, DuplicateCode)
+
 ## What I Would Do With More Time
 
 <!-- What would you tackle next if you had more time? -->

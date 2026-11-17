@@ -1,12 +1,27 @@
 import { PrismaLibSql } from "@prisma/adapter-libsql";
 import { config as loadEnv } from "dotenv";
-import { mkdirSync } from "node:fs";
+import { existsSync, mkdirSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { PrismaClient } from "./generated/prisma/client";
+import { PrismaClient } from "../../generated/prisma/client";
 
-const packageDir = dirname(fileURLToPath(import.meta.url));
-const repoRoot = resolve(packageDir, "../../..");
+function findRepoRoot(): string {
+  let directory = process.cwd();
+
+  while (true) {
+    if (existsSync(resolve(directory, "pnpm-workspace.yaml"))) {
+      return directory;
+    }
+
+    const parent = dirname(directory);
+    if (parent === directory) break;
+    directory = parent;
+  }
+
+  return resolve(dirname(fileURLToPath(import.meta.url)), "../../../../..");
+}
+
+const repoRoot = findRepoRoot();
 
 loadEnv({ path: resolve(repoRoot, ".env") });
 

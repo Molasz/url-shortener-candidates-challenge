@@ -8,6 +8,7 @@ import {
 } from "react-router";
 
 import type { Route } from "./+types/root";
+import { ErrorPage } from "./components/error-page";
 import "./app.css";
 
 export const links: Route.LinksFunction = () => [
@@ -46,30 +47,32 @@ export default function App() {
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-  let message = "Oops!";
-  let details = "An unexpected error occurred.";
+  let status = 500;
+  let title = "Something went wrong";
+  let message = "An unexpected error occurred. Please try again in a moment.";
   let stack: string | undefined;
 
   if (isRouteErrorResponse(error)) {
-    message = error.status === 404 ? "404" : "Error";
-    details =
-      error.status === 404
-        ? "The requested page could not be found."
-        : error.statusText || details;
-  } else if (import.meta.env.DEV && error && error instanceof Error) {
-    details = error.message;
+    status = error.status;
+
+    if (error.status === 404) {
+      title = "Page not found";
+      message = "The page you are looking for doesn't exist or has been moved.";
+    } else {
+      message = error.statusText || message;
+    }
+  } else if (error instanceof Error && import.meta.env.DEV) {
+    // Never leak internal error details or stack traces in production.
+    message = error.message;
     stack = error.stack;
   }
 
   return (
-    <main className="pt-16 p-4 container mx-auto">
-      <h1>{message}</h1>
-      <p>{details}</p>
-      {stack && (
-        <pre className="w-full p-4 overflow-x-auto">
-          <code>{stack}</code>
-        </pre>
-      )}
-    </main>
+    <ErrorPage
+      status={status}
+      title={title}
+      message={message}
+      stack={stack}
+    />
   );
 }

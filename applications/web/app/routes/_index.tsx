@@ -1,6 +1,10 @@
 import { Form, useActionData } from "react-router";
 import type { Route } from "./+types/_index";
-import { baseUrl, createShortenedUrl, createShortUrlSchema } from "@url-shortener/engine";
+import {
+  baseUrl,
+  createShortUrlUseCase,
+  InvalidUrlError,
+} from "@url-shortener/engine";
 
 export function loader() {
   return {
@@ -14,20 +18,23 @@ export async function action({ request }: Route.ActionArgs) {
 
   const value = typeof rawUrl === "string" ? rawUrl : "";
 
-  const result = createShortUrlSchema.safeParse({ originalUrl: rawUrl });
+  try {
+    const shortened = await createShortUrlUseCase.execute({
+      originalUrl: value,
+    });
 
-  if (!result.success) {
     return {
-      error: result.error.issues[0]?.message ?? "Invalid URL",
-      value,
+      shortenedUrl: `${baseUrl ?? ""}/s/${shortened.shortCode}`,
     };
+  } catch (error) {
+    // Validation failures are expected user input errors, not crashes:
+    // return them as form data so the page can show feedback inline.
+    if (error instanceof InvalidUrlError) {
+      return { error: error.message, value };
+    }
+
+    throw error;
   }
-
-  const shortened = await createShortenedUrl(result.data.originalUrl);
-
-  return {
-    shortenedUrl: `${baseUrl ?? ""}/s/${shortened.shortCode}`,
-  };
 }
 
 export function meta({}: Route.MetaArgs) {

@@ -2,10 +2,6 @@ import { z } from "zod";
 
 const MAX_URL_LENGTH = 2048;
 
-/**
- * Shared validation for the URL-shortening form: a real URL that uses only
- * the http or https protocol.
- */
 export const createShortUrlSchema = z.object({
   originalUrl: z.preprocess(
     (value) => (typeof value === "string" ? value.trim() : value),
