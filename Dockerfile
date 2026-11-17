@@ -5,6 +5,8 @@ WORKDIR /app
 FROM base AS dependencies
 COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
 COPY libs/engine/package.json ./libs/engine/
+COPY libs/engine/prisma.config.ts ./libs/engine/
+COPY libs/engine/prisma ./libs/engine/prisma
 COPY applications/web/package.json ./applications/web/
 RUN pnpm install --frozen-lockfile
 
@@ -21,6 +23,8 @@ COPY --from=build /app/applications/web/node_modules ./applications/web/node_mod
 COPY --from=build /app/libs/engine/node_modules ./libs/engine/node_modules
 COPY --from=build /app/applications/web/build ./applications/web/build
 COPY libs/engine/src ./libs/engine/src
+COPY libs/engine/prisma ./libs/engine/prisma
+COPY libs/engine/prisma.config.ts ./libs/engine/
 COPY applications/web/package.json ./applications/web/
 COPY libs/engine/package.json ./libs/engine/
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./

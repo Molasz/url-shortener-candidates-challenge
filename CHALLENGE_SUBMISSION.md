@@ -2,7 +2,13 @@
 
 ## What I Did
 
-<!-- Briefly describe what you implemented or improved. What did you prioritize and why? -->
+1 - Data persistence [Prisma + SQLite]
+- Add dependencies
+- Create schema (ShortenedUrl)
+- Setup prisma 7
+- Init prisma client
+- Delete old Map and use prisma functions
+- Configurations: commands, .env, docker...
 
 ## What I Would Do With More Time
 

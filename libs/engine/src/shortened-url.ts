@@ -1,4 +1,13 @@
-export const shortenedUrls: Map<string, string> = new Map();
+import { prisma } from "./db";
+
+export type ShortenedUrlRecord = {
+  id: string;
+  originalUrl: string;
+  shortCode: string;
+  clickCount: number;
+  createdAt: Date;
+  deletedAt: Date | null;
+};
 
 export function generateShortCode(): string {
   const chars = "abc";
@@ -8,4 +17,27 @@ export function generateShortCode(): string {
     code += chars[Math.floor(Math.random() * chars.length)];
   }
   return code;
+}
+
+export async function createShortenedUrl(
+  originalUrl: string,
+  shortCode = generateShortCode(),
+): Promise<ShortenedUrlRecord> {
+  return prisma.shortenedUrl.create({
+    data: {
+      originalUrl,
+      shortCode,
+    },
+  });
+}
+
+export async function findActiveUrlByCode(
+  shortCode: string,
+): Promise<ShortenedUrlRecord | null> {
+  return prisma.shortenedUrl.findFirst({
+    where: {
+      shortCode,
+      deletedAt: null,
+    },
+  });
 }
