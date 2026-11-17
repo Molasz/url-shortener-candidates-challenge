@@ -1,6 +1,6 @@
 import { Form, useActionData } from "react-router";
 import type { Route } from "./+types/_index";
-import { baseUrl, createShortenedUrl } from "@url-shortener/engine";
+import { baseUrl, createShortenedUrl, createShortUrlSchema } from "@url-shortener/engine";
 
 export function loader() {
   return {
@@ -10,16 +10,23 @@ export function loader() {
 
 export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
-  const url = formData.get("url") as string;
+  const rawUrl = formData.get("url");
 
-  if (!url) {
-    return { error: "URL is required" };
+  const value = typeof rawUrl === "string" ? rawUrl : "";
+
+  const result = createShortUrlSchema.safeParse({ originalUrl: rawUrl });
+
+  if (!result.success) {
+    return {
+      error: result.error.issues[0]?.message ?? "Invalid URL",
+      value,
+    };
   }
 
-  const shortened = await createShortenedUrl(url);
+  const shortened = await createShortenedUrl(result.data.originalUrl);
 
   return {
-    shortenedUrl: `${baseUrl}/s/${shortened.shortCode}`,
+    shortenedUrl: `${baseUrl ?? ""}/s/${shortened.shortCode}`,
   };
 }
 
@@ -46,6 +53,8 @@ export default function Index({ loaderData }: Route.ComponentProps) {
             type="text"
             name="url"
             placeholder="Enter your URL here..."
+            defaultValue={actionData?.value ?? ""}
+            aria-invalid={!!actionData?.error}
             required
             className="w-full px-4 py-3 text-base bg-orange-200 border-4 border-blue-600 text-purple-800 placeholder-red-400 rounded focus:outline-none"
           />
@@ -80,11 +89,7 @@ export default function Index({ loaderData }: Route.ComponentProps) {
         )}
 
         {actionData?.error && (
-          <div className="mt-8 p-4 bg-lime-500 rounded-none border-8 border-solid border-red-700">
-            <p className="text-2xl text-blue-800 font-black">
-              {actionData.error}
-            </p>
-          </div>
+          <p className="mt-4 text-lg font-bold text-red-700">{actionData.error}</p>
         )}
       </div>
     </main>
